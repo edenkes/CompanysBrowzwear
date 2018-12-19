@@ -21,10 +21,30 @@ function sort(countriesList) {
     })
 }
 
+function getCompanies(countriesList, countryName, cityName) {
+    for (let i = 0; i < countriesList.length; i++) {
+        if (countriesList[i].name === countryName) {
+            for (let j = 0; j < countriesList[i].cities.length; j++) {
+                if (countriesList[i].cities[j].name === cityName) {
+                    return countriesList[i].cities[j].companies;
+                }
+            }
+        }
+    }
+    return null
+}
+
+function getCitiesList(countriesList, countryName) {
+    for (let i = 0; i < countriesList.length; i++) {
+        if (countriesList[i].name === countryName) {
+            return countriesList[i].cities;
+        }
+    }
+    return null}
+
 class CompanyTable extends Component {
 
     state = {
-        // list: {ed: 'ed'},
         countriesList: [],
         citiesList: [],
         companyList: [],
@@ -1143,7 +1163,7 @@ class CompanyTable extends Component {
         };
         // });
 
-        const countriesList = this.parseList(list['Customers'])
+        const countriesList = this.parseList(list['Customers']);
 
         if(countriesList){
             this.setState({
@@ -1187,18 +1207,7 @@ class CompanyTable extends Component {
                 return null
             }
 
-            function getCompanies(countries, countryName, cityName) {
-                for (let i = 0; i < countries.length; i++) {
-                    if (countries[i].name === countryName) {
-                        for (let j = 0; j < countries[i].cities.length; j++) {
-                            if (countries[i].cities[j].name === cityName) {
-                                return countries[i].cities[j].companies;
-                            }
-                        }
-                    }
-                }
-                return null
-            }
+
 
             if (isContain(countriesList, countryName)) {
                 const cities = getCities(countriesList, countryName);
@@ -1281,6 +1290,58 @@ class CompanyTable extends Component {
 
     };
 
+    changeCity = (event) => {
+        const countryName = event.target.textContent;
+        const citiesList = getCitiesList(this.state.countriesList, countryName);
+
+        this.setState({
+
+            citiesList: citiesList,
+            companyList: citiesList[0].companies,
+
+            countryName: countryName,
+            cityName: citiesList[0].name,
+            companyName: citiesList[0].companies[0].name,
+            companyAddress: citiesList[0].companies[0].Address,
+        })
+    };
+
+    changeCompany = (event) => {
+        const cityName = event.target.textContent;
+        const companyList = getCompanies(this.state.countriesList, this.state.countryName, cityName);
+
+        this.setState({
+            companyList: companyList,
+
+            cityName: cityName,
+            companyName: companyList[0].name,
+            companyAddress: companyList[0].Address,
+        })
+    };
+
+    changeLocation = (event) => {
+        // event.preventDefault();
+        // console.log('value ',event.target.textContent)
+
+        // event.target.style.color = 'red';
+        this.setState({
+            companyName: event.target.textContent,
+            companyAddress: this.getCompanyAddress(this.state.countriesList, this.state.countryName, this.state.cityName, event.target.textContent),
+
+        });
+    };
+
+    getCompanyAddress = (countriesList, countryName, cityName, companyName) => {
+        for (let i = 0; i < countriesList.length; i++)
+            if (countriesList[i].name === countryName)
+                for (let j = 0; j < countriesList[i].cities.length; j++)
+                    if (countriesList[i].cities[j].name === cityName)
+                        for (let k = 0; k < countriesList[i].cities[j].companies.length; k++)
+                            if (countriesList[i].cities[j].companies[k].name === companyName) {
+                                return countriesList[i].cities[j].companies[k].Address;
+                            }
+        return null
+    };
 
     render() {
 
@@ -1311,27 +1372,40 @@ class CompanyTable extends Component {
                         <th>
                             <ul className="list-group">
                                 {countriesList.map(({name}) => (
-                                    <Button block className="btn btn-outline-primary border-0 " key={name}>
-                                        {name}
-                                    </Button>
+                                    name === this.state.countryName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
+                                            {name}
+                                        </Button>
+                                        :
+                                        <Button block className="btn btn-outline-primary border-0" onClick={this.changeCity.bind(this)} key={name}>
+                                            {name}
+                                        </Button>
                                 ))}
                             </ul>
                         </th>
                         <th>
                             <ul className="list-group">
                                 {citiesList.map(({name}) => (
-                                    <Button block className="btn btn-outline-primary border-0 " key={name}>
-                                        {name}
-                                    </Button>
+                                    name === this.state.cityName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
+                                            {name}
+                                        </Button>
+                                        :
+                                        <Button block className="btn btn-outline-primary border-0" onClick={this.changeCompany.bind(this)} key={name}>
+                                            {name}
+                                        </Button>
                                 ))}
                             </ul>
                         </th>
                         <th>
                             <ul className="list-group">
                                 {companyList.map(({name}) => (
-                                    <Button block className="btn btn-outline-primary border-0 " key={name}>
-                                        {name}
-                                    </Button>
+
+                                    name === this.state.companyName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
+                                            {name}
+                                        </Button>
+                                        :
+                                        <Button block className="btn btn-outline-primary border-0" onClick={this.changeLocation.bind(this)} key={name}>
+                                            {name}
+                                        </Button>
                                 ))}
                             </ul>
                         </th>
