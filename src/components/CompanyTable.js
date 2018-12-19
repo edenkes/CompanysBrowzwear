@@ -12,6 +12,7 @@ class CompanyTable extends Component {
         return(
             <Container >
                 <Table className="m-4">
+
                     <thead className="">
                     <tr>
                         <th>
