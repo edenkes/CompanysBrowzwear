@@ -12,7 +12,6 @@ class App extends Component {
       <div className="App">
           <AppNavbar/>
           <CompanyTable />
-          <h1>Hello</h1>
       </div>
     );
   }
