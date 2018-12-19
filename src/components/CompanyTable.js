@@ -1,46 +1,7 @@
 import React, {Component} from 'react';
 import {Container, Table, Button} from 'reactstrap';
 
-
-function sort(countriesList) {
-    console.log("sort ", countriesList.sort((first, second) => {
-        return -(first.cities.length - second.cities.length)
-    }));
-
-    countriesList.forEach(country => {
-        country.cities.sort((first, second) => {
-            return -(first.companies.length - second.companies.length)
-        });
-
-        country.cities.forEach(city => {
-            city.companies.sort((first, second) => {
-                return first['name'].localeCompare(second['name'])
-            })
-        })
-
-    })
-}
-
-function getCompanies(countriesList, countryName, cityName) {
-    for (let i = 0; i < countriesList.length; i++) {
-        if (countriesList[i].name === countryName) {
-            for (let j = 0; j < countriesList[i].cities.length; j++) {
-                if (countriesList[i].cities[j].name === cityName) {
-                    return countriesList[i].cities[j].companies;
-                }
-            }
-        }
-    }
-    return null
-}
-
-function getCitiesList(countriesList, countryName) {
-    for (let i = 0; i < countriesList.length; i++) {
-        if (countriesList[i].name === countryName) {
-            return countriesList[i].cities;
-        }
-    }
-    return null}
+const first = 0;
 
 class CompanyTable extends Component {
 
@@ -55,7 +16,6 @@ class CompanyTable extends Component {
     };
 
     componentDidMount() {
-        // this.setState({
         const list = {
             "Customers": [
                 {
@@ -1161,20 +1121,28 @@ class CompanyTable extends Component {
             ],
             "ResponseStatus": {}
         };
-        // });
 
         const countriesList = this.parseList(list['Customers']);
 
         if(countriesList){
+            const countryName = countriesList[first].name;
+
+            const citiesList = getCitiesList(countriesList, countryName);
+            const cityName = citiesList[first].name;
+
+            const companyList = getCompaniesList(countriesList, countryName, cityName);
+            const companyName = companyList[first].name;
+            const companyAddress = companyList[first].Address;
+
             this.setState({
                 countriesList: countriesList,
-                citiesList: countriesList[0].cities,
-                companyList: countriesList[0].cities[0].companies,
+                citiesList: citiesList,
+                companyList: companyList,
 
-                countryName: countriesList[0].name,
-                cityName: countriesList[0].cities[0].name,
-                companyName: countriesList[0].cities[0].companies[0].name,
-                companyAddress: countriesList[0].cities[0].companies[0].Address,
+                countryName: countryName,
+                cityName: cityName,
+                companyName: companyName,
+                companyAddress: companyAddress,
             })
         }
     }
@@ -1187,32 +1155,43 @@ class CompanyTable extends Component {
             const companyName = element['CompanyName'];
             const Address = element['Address'];
 
-            function isContain(array, name) {
-                for (let i = 0; i < array.length; i++){
-                    if (array[i].name === name){
-                        // console.log('isContain', array, name)
-                        return true
-                    }
+            const citiesList = getCitiesList(countriesList, countryName);
 
-                }
-                return false;
-            }
+            if (citiesList) {
+                const companiesList = getCompaniesList(countriesList, countryName, cityName);
 
-            function getCities(countries, countryName) {
-                for (let i = 0; i < countries.length; i++) {
-                    if (countries[i].name === countryName) {
-                        return countries[i].cities;
-                    }
-                }
-                return null
-            }
+                if (companiesList){
+                    companiesList.push({
+                        name: companyName,
+                        Address: Address
+                    })
 
+                } else
+                    citiesList.push({
+                        name: cityName,
+                        companies: [{
+                            name: companyName,
+                            Address: Address
+                        }]
+                    })
 
+            }else
+                countriesList.push({
+                    name: countryName,
+                    cities: [{
+                        name: cityName,
+                        companies: [{
+                            name: companyName,
+                            Address: Address
+                        }]
+                    }]
+                })
 
+            /*
             if (isContain(countriesList, countryName)) {
-                const cities = getCities(countriesList, countryName);
+                const cities = getCitiesList(countriesList, countryName);
                 if(isContain(cities, cityName)){
-                    const companies = getCompanies(countriesList, countryName, cityName);
+                    const companies = getCompaniesList(countriesList, countryName, cityName);
                     if(isContain(companies, companyName)){
                         console.log("duplicate company")
                     }else
@@ -1237,7 +1216,7 @@ class CompanyTable extends Component {
                         companies: [{
                             name: companyName,
                             Address: Address
-                        }]}]})
+                        }]}]})*/
         });
 
         sort(countriesList);
@@ -1291,31 +1270,43 @@ class CompanyTable extends Component {
     };
 
     changeCity = (event) => {
+        const countriesList = this.state.countriesList;
         const countryName = event.target.textContent;
-        const citiesList = getCitiesList(this.state.countriesList, countryName);
+
+        const citiesList = getCitiesList(countriesList, countryName);
+        const cityName = citiesList[first].name;
+
+        const companyList = citiesList[first].companies;
+        const companyName = citiesList[first].companies[first].name;
+        const companyAddress = citiesList[first].companies[first].Address;
 
         this.setState({
-
             citiesList: citiesList,
-            companyList: citiesList[0].companies,
+            companyList: companyList,
 
             countryName: countryName,
-            cityName: citiesList[0].name,
-            companyName: citiesList[0].companies[0].name,
-            companyAddress: citiesList[0].companies[0].Address,
+            cityName: cityName,
+            companyName: companyName,
+            companyAddress: companyAddress,
         })
     };
 
     changeCompany = (event) => {
+        const countriesList = this.state.countriesList;
+        const countryName = this.state.countryName;
+
         const cityName = event.target.textContent;
-        const companyList = getCompanies(this.state.countriesList, this.state.countryName, cityName);
+
+        const companyList = getCompaniesList(countriesList, countryName, cityName);
+        const companyName =  companyList[first].name;
+        const companyAddress = companyList[first].Address;
 
         this.setState({
             companyList: companyList,
 
             cityName: cityName,
-            companyName: companyList[0].name,
-            companyAddress: companyList[0].Address,
+            companyName: companyName,
+            companyAddress: companyAddress,
         })
     };
 
@@ -1326,21 +1317,8 @@ class CompanyTable extends Component {
         // event.target.style.color = 'red';
         this.setState({
             companyName: event.target.textContent,
-            companyAddress: this.getCompanyAddress(this.state.countriesList, this.state.countryName, this.state.cityName, event.target.textContent),
-
+            companyAddress: getCompanyAddress(this.state.countriesList, this.state.countryName, this.state.cityName, event.target.textContent),
         });
-    };
-
-    getCompanyAddress = (countriesList, countryName, cityName, companyName) => {
-        for (let i = 0; i < countriesList.length; i++)
-            if (countriesList[i].name === countryName)
-                for (let j = 0; j < countriesList[i].cities.length; j++)
-                    if (countriesList[i].cities[j].name === cityName)
-                        for (let k = 0; k < countriesList[i].cities[j].companies.length; k++)
-                            if (countriesList[i].cities[j].companies[k].name === companyName) {
-                                return countriesList[i].cities[j].companies[k].Address;
-                            }
-        return null
     };
 
     render() {
@@ -1432,3 +1410,59 @@ class CompanyTable extends Component {
 }
 
 export default CompanyTable;
+
+function sort(countriesList) {
+    /*console.log("sort ", countriesList.sort((first, second) => {
+        return -(first.cities.length - second.cities.length)
+    }));*/
+    countriesList.sort((first, second) => {
+        return -(first.cities.length - second.cities.length)
+    });
+
+    countriesList.forEach(country => {
+        country.cities.sort((first, second) => {
+            return -(first.companies.length - second.companies.length)
+        });
+
+        country.cities.forEach(city => {
+            city.companies.sort((first, second) => {
+                return first['name'].localeCompare(second['name'])
+            })
+        })
+
+    })
+}
+
+function getCitiesList(countriesList, countryName) {
+    for (let i = 0; i < countriesList.length; i++) {
+        if (countriesList[i].name === countryName) {
+            return countriesList[i].cities;
+        }
+    }
+    return undefined;
+}
+
+function getCompaniesList(countriesList, countryName, cityName) {
+    for (let i = 0; i < countriesList.length; i++) {
+        if (countriesList[i].name === countryName) {
+            for (let j = 0; j < countriesList[i].cities.length; j++) {
+                if (countriesList[i].cities[j].name === cityName) {
+                    return countriesList[i].cities[j].companies;
+                }
+            }
+        }
+    }
+    return undefined;
+}
+
+function getCompanyAddress(countriesList, countryName, cityName, companyName) {
+    for (let i = 0; i < countriesList.length; i++)
+        if (countriesList[i].name === countryName)
+            for (let j = 0; j < countriesList[i].cities.length; j++)
+                if (countriesList[i].cities[j].name === cityName)
+                    for (let k = 0; k < countriesList[i].cities[j].companies.length; k++)
+                        if (countriesList[i].cities[j].companies[k].name === companyName) {
+                            return countriesList[i].cities[j].companies[k].Address;
+                        }
+    return null
+}
