@@ -7,10 +7,19 @@ const first = 0;
 
 class CompanyTable extends Component {
     state = {
+        // Lists with all the countries.
+        // etc [{name: 'Germany',
+        //      cities: [name: 'Berlin',
+        //              companies: [{name: 'microsoft'
+        //                          Address: '123 st'}]]}]
         countriesList: [],
-        citiesList: [],
-        companyList: [],
 
+        // List with adjust cities for a Country
+        citiesListCurrent: [],
+        // List with adjust companies for a city
+        companyListCurrent: [],
+
+        // Names for display
         countryName: '',
         cityName: '',
         companyName: '',
@@ -35,8 +44,8 @@ class CompanyTable extends Component {
 
             this.setState({
                 countriesList: countriesList,
-                citiesList: citiesList,
-                companyList: companyList,
+                citiesListCurrent: citiesList,
+                companyListCurrent: companyList,
 
                 countryName: countryName,
                 cityName: cityName,
@@ -106,8 +115,8 @@ class CompanyTable extends Component {
         const companyAddress = citiesList[first].companies[first].Address;
 
         this.setState({
-            citiesList: citiesList,
-            companyList: companyList,
+            citiesListCurrent: citiesList,
+            companyListCurrent: companyList,
 
             countryName: countryName,
             cityName: cityName,
@@ -128,7 +137,7 @@ class CompanyTable extends Component {
         const companyAddress = companyList[first].Address;
 
         this.setState({
-            companyList: companyList,
+            companyListCurrent: companyList,
 
             cityName: cityName,
             companyName: companyName,
@@ -145,14 +154,13 @@ class CompanyTable extends Component {
     };
 
     render() {
-        const {countriesList, citiesList, companyList, companyAddress} = this.state;
+        const {countriesList, citiesListCurrent, companyListCurrent, companyAddress} = this.state;
 
         return(
             <Container>
                 <Table className="m-4" bordered>
                     <thead>
                     <tr>
-
                         <th >{
                             /* In the leftmost column, display the list of countries present in the file.*/}
                             Countries
@@ -191,7 +199,7 @@ class CompanyTable extends Component {
                         <th>
                             <div className="pre-scrollable">
                                 <ul className="list-group" >
-                                    {citiesList.map(({name}) => (
+                                    {citiesListCurrent.map(({name}) => (
                                         name === this.state.cityName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
                                                 {name}
                                             </Button>
@@ -206,7 +214,7 @@ class CompanyTable extends Component {
                         <th>
                             <div className="pre-scrollable">
                                 <ul className="list-group">
-                                    {companyList.map(({name}) => (
+                                    {companyListCurrent.map(({name}) => (
 
                                         name === this.state.companyName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
                                                 {name}
@@ -252,11 +260,10 @@ function sort(countriesList) {
                 return first['name'].localeCompare(second['name'])
             })
         })
-
     })
 }
 
-// get a list of cities
+// Get a list of cities
 function getCitiesList(countriesList, countryName) {
     for (let i = 0; i < countriesList.length; i++) {
         if (countriesList[i].name === countryName) {
@@ -266,7 +273,7 @@ function getCitiesList(countriesList, countryName) {
     return undefined;
 }
 
-// get a list of Companies
+// Get a list of Companies
 function getCompaniesList(countriesList, countryName, cityName) {
     for (let i = 0; i < countriesList.length; i++) {
         if (countriesList[i].name === countryName) {
@@ -280,7 +287,7 @@ function getCompaniesList(countriesList, countryName, cityName) {
     return undefined;
 }
 
-// get a string of company address
+// Get a string of company address
 function getCompanyAddress(countriesList, countryName, cityName, companyName) {
     for (let i = 0; i < countriesList.length; i++)
         if (countriesList[i].name === countryName)
