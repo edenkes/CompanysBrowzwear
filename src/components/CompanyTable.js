@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 import {Container, Table, Button} from 'reactstrap';
 import clientsList from "../public/clients.json";
+import MapContainer from "./MapContainer";
+import {Map} from "google-maps-react";
 
 const first = 0;
 
 class CompanyTable extends Component {
-
     state = {
         countriesList: [],
         citiesList: [],
         companyList: [],
-        
+
         countryName: '',
         cityName: '',
         companyName: '',
@@ -18,7 +19,6 @@ class CompanyTable extends Component {
     };
 
     componentWillMount() {
-
         const countriesList = this.parseList(clientsList['Customers']);
 
         if(countriesList){
@@ -140,12 +140,26 @@ class CompanyTable extends Component {
 
     render() {
         const {countriesList, citiesList, companyList, companyAddress} = this.state;
+        const styleMap = {
+            width: '50%',
+        };
+        const style = {
+            maxHeight: '100px',
+            maxWidth: '100px',
+            overflowX: 'hidden',
+            overflowY: 'hidden'
+        };
+/*        const styleUL = {
+            height: '100px',
+            overflowX : 'auto'
+        };*/
+
         return(
-            <Container >
-                <Table className="m-4">
+            <Container className=".table-responsive-sm">
+                <Table className="m-4" bordered >
                     <thead className="">
                     <tr>
-                        <th>
+                        <th >
                             Countries
                         </th>
                         <th className="">
@@ -154,13 +168,13 @@ class CompanyTable extends Component {
                         <th className="">
                             Company
                         </th>
-                        <th className="">
+                        <th style={styleMap}>
                             Map
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr >
                         <th>
                             <ul className="list-group">
                                 {countriesList.map(({name}) => (
@@ -175,7 +189,7 @@ class CompanyTable extends Component {
                             </ul>
                         </th>
                         <th>
-                            <ul className="list-group">
+                            <ul className="list-group" >
                                 {citiesList.map(({name}) => (
                                     name === this.state.cityName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
                                             {name}
@@ -201,8 +215,12 @@ class CompanyTable extends Component {
                                 ))}
                             </ul>
                         </th>
-                        <th>
-                            {companyAddress}
+                        <th >
+                            {/*{companyAddress}*/}
+
+                            <div style={style}>
+                                <MapContainer />
+                            </div>
                         </th>
                     </tr>
                     </tbody>
