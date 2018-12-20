@@ -1,3 +1,10 @@
 .App {
   text-align: center;
 }
+html,
+body,
+.view {
+  min-height: 100%;
+  height: fit-content;
+  overflow: hidden;
+}

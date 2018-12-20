@@ -75,8 +75,8 @@ export class MapContainer extends Component {
         return (
             <Map google={this.props.google}
                  onClick={this.onMapClicked}
-                 zoom={16}
-                 style={{width: '40%', height: '60%'}}
+                 zoom={15}
+                 style={{width: '520px', height: '340px'}}
                  center={center} >
 
                 <Marker onClick={this.onMarkerClick}
