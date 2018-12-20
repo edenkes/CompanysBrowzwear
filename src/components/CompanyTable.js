@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Container, Table, Button} from 'reactstrap';
 import clientsList from "../public/clients.json";
 import MapContainer from "./MapContainer";
-import {Map} from "google-maps-react";
 
 const first = 0;
 
@@ -50,7 +49,7 @@ class CompanyTable extends Component {
             const countryName = element['Country'];
             const cityName = element['City'];
             const companyName = element['CompanyName'];
-            const Address = element['Address'];
+            const Address = element['Address'] +', ' + cityName+ ', ' + countryName;
 
             const citiesList = getCitiesList(countriesList, countryName);
 
@@ -216,10 +215,10 @@ class CompanyTable extends Component {
                             </ul>
                         </th>
                         <th >
-                            {/*{companyAddress}*/}
-
                             <div className="" style={style}>
-                                <MapContainer />
+                                <MapContainer
+                                    address={companyAddress}
+                                />
                             </div>
                         </th>
                     </tr>
