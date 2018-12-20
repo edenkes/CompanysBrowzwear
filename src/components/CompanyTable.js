@@ -18,9 +18,12 @@ class CompanyTable extends Component {
     };
 
     componentWillMount() {
+        // Load the attached JSON file
         const countriesList = this.parseList(clientsList['Customers']);
 
         if(countriesList){
+            // The default view is for the first contact of the
+            // first city of the first country
             const countryName = countriesList[first].name;
 
             const citiesList = getCitiesList(countriesList, countryName);
@@ -43,6 +46,7 @@ class CompanyTable extends Component {
         }
     }
 
+    // Parse the List of json into custom data structure
     parseList = (CustomersList) => {
         const countriesList = [];
         CustomersList.forEach(function(element) {
@@ -89,6 +93,7 @@ class CompanyTable extends Component {
         return countriesList
     };
 
+    // Click event when user click on a country
     changeCity = (event) => {
         const countriesList = this.state.countriesList;
         const countryName = event.target.textContent;
@@ -111,6 +116,7 @@ class CompanyTable extends Component {
         })
     };
 
+    // Click event when user click on a city
     changeCompany = (event) => {
         const countriesList = this.state.countriesList;
         const countryName = this.state.countryName;
@@ -130,6 +136,7 @@ class CompanyTable extends Component {
         })
     };
 
+    // Click event when user click on a company
     changeLocation = (event) => {
         this.setState({
             companyName: event.target.textContent,
@@ -141,20 +148,25 @@ class CompanyTable extends Component {
         const {countriesList, citiesList, companyList, companyAddress} = this.state;
 
         return(
-            <Container  id="container1" className="">
+            <Container>
                 <Table className="m-4" bordered>
-                    <thead className="">
+                    <thead>
                     <tr>
-                        <th >
+
+                        <th >{
+                            /* In the leftmost column, display the list of countries present in the file.*/}
                             Countries
                         </th>
-                        <th className="">
+                        <th >
+                            {/*Show list of cities in that country in the second column.*/}
                             Cities
                         </th>
-                        <th className="">
+                        <th >
+                            {/*Show alphabetized list of companies in that city*/}
                             Company
                         </th>
                         <th style={{width: '50%', minWidth: '550px'}}>
+                            {/*Show a Google map with a pin at the company address*/}
                             Map
                         </th>
                     </tr>
@@ -223,16 +235,19 @@ class CompanyTable extends Component {
 export default CompanyTable;
 
 function sort(countriesList) {
+    // Countries should be sorted by number of cities, highest first.
     countriesList.sort((first, second) => {
         return -(first.cities.length - second.cities.length)
     });
 
     countriesList.forEach(country => {
+        // Cities should be sorted by number of companies, highest first.
         country.cities.sort((first, second) => {
             return -(first.companies.length - second.companies.length)
         });
 
         country.cities.forEach(city => {
+            // Show alphabetized list of companies in that city
             city.companies.sort((first, second) => {
                 return first['name'].localeCompare(second['name'])
             })
@@ -241,6 +256,7 @@ function sort(countriesList) {
     })
 }
 
+// get a list of cities
 function getCitiesList(countriesList, countryName) {
     for (let i = 0; i < countriesList.length; i++) {
         if (countriesList[i].name === countryName) {
@@ -250,6 +266,7 @@ function getCitiesList(countriesList, countryName) {
     return undefined;
 }
 
+// get a list of Companies
 function getCompaniesList(countriesList, countryName, cityName) {
     for (let i = 0; i < countriesList.length; i++) {
         if (countriesList[i].name === countryName) {
@@ -263,6 +280,7 @@ function getCompaniesList(countriesList, countryName, cityName) {
     return undefined;
 }
 
+// get a string of company address
 function getCompanyAddress(countriesList, countryName, cityName, companyName) {
     for (let i = 0; i < countriesList.length; i++)
         if (countriesList[i].name === countryName)
