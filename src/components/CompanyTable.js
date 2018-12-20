@@ -218,7 +218,7 @@ class CompanyTable extends Component {
                         <th >
                             {/*{companyAddress}*/}
 
-                            <div style={style}>
+                            <div className="" style={style}>
                                 <MapContainer />
                             </div>
                         </th>
