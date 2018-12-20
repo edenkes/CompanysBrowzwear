@@ -11,8 +11,7 @@ export class MapContainer extends Component {
         center: {lat: 42, lng:42}
     };
 
-    onMarkerClick = (props, marker, e) =>{
-        // console.log(props, marker, e);
+    onMarkerClick = (props, marker) =>{
         this.setState({
             selectedPlace: props,
             activeMarker: marker,
@@ -20,7 +19,7 @@ export class MapContainer extends Component {
         });
     };
 
-    onMapClicked = (props) => {
+    onMapClicked = () => {
         if (this.state.showingInfoWindow) {
             this.setState({
                 showingInfoWindow: false,
@@ -34,7 +33,6 @@ export class MapContainer extends Component {
         Geocode.fromAddress(this.props.address).then(
             response => {
                 const { lat, lng } = response.results[0].geometry.location;
-                // console.log('response 1', this.props.address, lat, lng);
                 this.setState({
                     center: {lat: lat, lng: lng}
                 })
@@ -46,16 +44,12 @@ export class MapContainer extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        // console.log('new ', nextState.latitude);
-        // console.log('old ', this.state.latitude);
-        if(this.props.address !== nextProps.address/* || nextState.latitude !== this.state.latitude*/){
+        if(this.props.address !== nextProps.address){
             Geocode.fromAddress(nextProps.address).then(
                 response => {
                     const { lat, lng } = response.results[0].geometry.location;
-                    // console.log('response ', this.props.address, lat, lng);
                     this.setState({
                         center: {lat: lat, lng: lng}
-
                     });
 
                 },
@@ -64,14 +58,11 @@ export class MapContainer extends Component {
                 }
             );
         }
-
         return true
     }
 
     render() {
-        const {center} = this.state
-        // console.log(center);
-
+        const {center} = this.state;
         return (
             <Map google={this.props.google}
                  onClick={this.onMapClicked}
@@ -82,10 +73,7 @@ export class MapContainer extends Component {
                 <Marker onClick={this.onMarkerClick}
                         name={this.props.address}
                         position={center}
-                    /*position={{
-                            lat: this.state.latitude,
-                            lng: this.state.longitude
-                        }} *//>
+                    />
 
                 <InfoWindow
                     marker={this.state.activeMarker}

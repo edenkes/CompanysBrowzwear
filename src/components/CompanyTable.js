@@ -139,19 +139,6 @@ class CompanyTable extends Component {
 
     render() {
         const {countriesList, citiesList, companyList, companyAddress} = this.state;
-        const styleMap = {
-            width: '50%',
-        };
-        const style = {
-            maxHeight: '100px',
-            maxWidth: '100px',
-            overflowX: 'hidden',
-            overflowY: 'hidden'
-        };
-/*        const styleUL = {
-            height: '100px',
-            overflowX : 'auto'
-        };*/
 
         return(
             <Container  id="container1" className="">
@@ -167,7 +154,7 @@ class CompanyTable extends Component {
                         <th className="">
                             Company
                         </th>
-                        <th style={styleMap}>
+                        <th style={{width: '50%', minWidth: '550px'}}>
                             Map
                         </th>
                     </tr>
@@ -191,42 +178,39 @@ class CompanyTable extends Component {
                         </th>
                         <th>
                             <div className="pre-scrollable">
-                            <ul className="list-group" >
-                                {citiesList.map(({name}) => (
-                                    name === this.state.cityName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
-                                            {name}
-                                        </Button>
-                                        :
-                                        <Button block className="btn btn-outline-primary border-0" onClick={this.changeCompany.bind(this)} key={name}>
-                                            {name}
-                                        </Button>
-                                ))}
-                            </ul>
+                                <ul className="list-group" >
+                                    {citiesList.map(({name}) => (
+                                        name === this.state.cityName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
+                                                {name}
+                                            </Button>
+                                            :
+                                            <Button block className="btn btn-outline-primary border-0" onClick={this.changeCompany.bind(this)} key={name}>
+                                                {name}
+                                            </Button>
+                                    ))}
+                                </ul>
                             </div>
                         </th>
                         <th>
                             <div className="pre-scrollable">
-                            <ul className="list-group">
-                                {companyList.map(({name}) => (
+                                <ul className="list-group">
+                                    {companyList.map(({name}) => (
 
-                                    name === this.state.companyName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
-                                            {name}
-                                        </Button>
-                                        :
-                                        <Button block className="btn btn-outline-primary border-0" onClick={this.changeLocation.bind(this)} key={name}>
-                                            {name}
-                                        </Button>
-                                ))}
-                            </ul>
+                                        name === this.state.companyName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
+                                                {name}
+                                            </Button>
+                                            :
+                                            <Button block className="btn btn-outline-primary border-0" onClick={this.changeLocation.bind(this)} key={name}>
+                                                {name}
+                                            </Button>
+                                    ))}
+                                </ul>
                             </div>
                         </th>
                         <th >
-
-                            <div className="" style={style}>
-                                <MapContainer
-                                    address={companyAddress}
-                                />
-                            </div>
+                            <MapContainer
+                                address={companyAddress}
+                            />
                         </th>
                     </tr>
                     </tbody>
