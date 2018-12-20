@@ -154,8 +154,8 @@ class CompanyTable extends Component {
         };*/
 
         return(
-            <Container className=".table-responsive-sm">
-                <Table className="m-4" bordered >
+            <Container  id="container1" className="">
+                <Table className="m-4" bordered>
                     <thead className="">
                     <tr>
                         <th >
@@ -175,19 +175,22 @@ class CompanyTable extends Component {
                     <tbody>
                     <tr >
                         <th>
-                            <ul className="list-group">
-                                {countriesList.map(({name}) => (
-                                    name === this.state.countryName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
-                                            {name}
-                                        </Button>
-                                        :
-                                        <Button block className="btn btn-outline-primary border-0" onClick={this.changeCity.bind(this)} key={name}>
-                                            {name}
-                                        </Button>
-                                ))}
-                            </ul>
+                            <div className="pre-scrollable">
+                                <ul className="list-group">
+                                    {countriesList.map(({name}) => (
+                                        name === this.state.countryName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
+                                                {name}
+                                            </Button>
+                                            :
+                                            <Button block className="btn btn-outline-primary border-0" onClick={this.changeCity.bind(this)} key={name}>
+                                                {name}
+                                            </Button>
+                                    ))}
+                                </ul>
+                            </div>
                         </th>
                         <th>
+                            <div className="pre-scrollable">
                             <ul className="list-group" >
                                 {citiesList.map(({name}) => (
                                     name === this.state.cityName ? <Button block className="btn btn-outline-primary active border-0" key={name}>
@@ -199,8 +202,10 @@ class CompanyTable extends Component {
                                         </Button>
                                 ))}
                             </ul>
+                            </div>
                         </th>
                         <th>
+                            <div className="pre-scrollable">
                             <ul className="list-group">
                                 {companyList.map(({name}) => (
 
@@ -213,8 +218,10 @@ class CompanyTable extends Component {
                                         </Button>
                                 ))}
                             </ul>
+                            </div>
                         </th>
                         <th >
+
                             <div className="" style={style}>
                                 <MapContainer
                                     address={companyAddress}
