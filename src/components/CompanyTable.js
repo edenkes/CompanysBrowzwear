@@ -26,6 +26,17 @@ class CompanyTable extends Component {
         companyAddress: '',
     };
 
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        /*        const path = '/search/country=' + nextState.countryName + '/city=' + nextState.cityName +
+                    '/company=' + nextState.companyName + '/location=' + nextState.companyAddress;*/
+        const path = '/search/' + nextState.countryName + '/' + nextState.cityName + '/' + nextState.companyName +
+            '/' + nextState.companyAddress;
+        if(this.props.history.location.pathname.localeCompare(path)){
+            this.props.history.push(path)
+        }
+        return true;
+    }
+
     componentWillMount() {
         // Load the attached JSON file
         const countriesList = this.parseList(clientsList['Customers']);
@@ -33,14 +44,22 @@ class CompanyTable extends Component {
         if(countriesList){
             // The default view is for the first contact of the
             // first city of the first country
-            const countryName = countriesList[first].name;
+            const countryName = this.props.match.params.country ? this.props.match.params.country : countriesList[first].name;
 
             const citiesList = getCitiesList(countriesList, countryName);
-            const cityName = citiesList[first].name;
+            if(!citiesList) {
+                this.props.history.push('/PageNotAvailable/' + countryName);
+                return
+            }
+            const cityName = this.props.match.params.city ? this.props.match.params.city : citiesList[first].name;
 
             const companyList = getCompaniesList(countriesList, countryName, cityName);
-            const companyName = companyList[first].name;
-            const companyAddress = companyList[first].Address;
+            if(!companyList) {
+                this.props.history.push('/PageNotAvailable/' + countryName + '/' + cityName);
+                return
+            }
+            const companyName = this.props.match.params.company ? this.props.match.params.company : companyList[first].name;
+            const companyAddress = this.props.match.params.location ? this.props.match.params.location : companyList[first].Address;
 
             this.setState({
                 countriesList: countriesList,
@@ -51,7 +70,14 @@ class CompanyTable extends Component {
                 cityName: cityName,
                 companyName: companyName,
                 companyAddress: companyAddress,
-            })
+            });
+
+            /*                const path = '/search/country=' + countryName + '/city=' + cityName +
+                                '/company=' + companyName + '/location=' + companyAddress;*/
+
+            const path = /search/ + countryName + '/' + cityName  + '/' + companyName + '/' + companyAddress;
+            this.props.history.push(path)
+
         }
     }
 
@@ -155,6 +181,7 @@ class CompanyTable extends Component {
 
     render() {
         const {countriesList, citiesListCurrent, companyListCurrent, companyAddress} = this.state;
+
 
         return(
             <Container>

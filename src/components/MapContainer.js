@@ -8,7 +8,7 @@ export class MapContainer extends Component {
         showingInfoWindow: false,
         activeMarker: {},
         selectedPlace: {},
-        center: {lat: 42, lng:42}
+        center: {lat: 45.5122308 , lng:-122.6587185}
     };
 
     onMarkerClick = (props, marker) =>{
@@ -77,9 +77,9 @@ export class MapContainer extends Component {
 
                 <InfoWindow
                     marker={this.state.activeMarker}
-                    visible={this.state.showingInfoWindow}>
+                    visible={this.state.showingInfoWindow} >
                     <div>
-                        <h2 className="">{this.state.selectedPlace.name}</h2>
+                        <h6 className="">{this.state.selectedPlace.name}</h6>
                     </div>
                 </InfoWindow>
 
