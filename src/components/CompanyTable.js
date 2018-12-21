@@ -75,9 +75,8 @@ class CompanyTable extends Component {
             /*                const path = '/search/country=' + countryName + '/city=' + cityName +
                                 '/company=' + companyName + '/location=' + companyAddress;*/
 
-            const path = /search/ + countryName + '/' + cityName  + '/' + companyName + '/' + companyAddress;
+            const path = '/search/' + countryName + '/' + cityName  + '/' + companyName + '/' + companyAddress;
             this.props.history.push(path)
-
         }
     }
 
