@@ -21,8 +21,7 @@ class MapContainer extends Component {
     }
 
     renderMap = () => {
-        loadScript("https://maps.googleapis.com/maps/api/js?" +
-            "key=AIzaSyCo9sOYpFP8-uPhzK_BecdEbjvKaEmR9uY&callback=initMap");
+        loadScript("https://maps.googleapis.com/maps/api/js?key="+ GoogleMapApi + "&callback=initMap");
         window.initMap = this.initMap
     };
 
