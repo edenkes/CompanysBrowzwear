@@ -14,3 +14,7 @@ body,
   min-height: 350px;
   /*height: 100vh;*/
 }
+
+.gm-style-iw {
+  color: firebrick;
+}

@@ -81,6 +81,7 @@ class MapContainer extends Component {
 
         // Change the content
         infoWindow.setContent(contentString);
+        // infoWindow.setContent(contentString);
 
         // Open An InfoWindow
         infoWindow.open(map, marker)
